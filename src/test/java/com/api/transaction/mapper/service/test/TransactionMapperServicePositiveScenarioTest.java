@@ -24,7 +24,7 @@ import com.api.transaction.mapper.service.TransactionMapperService;
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionMapperServicePositiveScenarioTest {
 	
-public final String URI = "https://apisandbox.openbankproject.com/obp/v1.2.1/banks/rbs/accounts/savings-kids-john/public/transactions";
+    public final String URI = "https://apisandbox.openbankproject.com/obp/v1.2.1/banks/rbs/accounts/savings-kids-john/public/transactions";
 	
 	@InjectMocks
 	TransactionMapperService transactionMapperService;

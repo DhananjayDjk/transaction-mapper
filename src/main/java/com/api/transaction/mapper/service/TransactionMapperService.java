@@ -12,6 +12,7 @@ import com.api.transaction.mapper.domain.OpenBankTransactionResponse;
 import com.api.transaction.mapper.domain.Transaction;
 import com.api.transaction.mapper.domain.TransactionMapperResult;
 import com.api.transaction.mapper.domain.TransformedTransaction;
+import com.api.transaction.mapper.util.TransactionMapperHelper;
 
 @Service
 public class TransactionMapperService {
@@ -41,6 +42,7 @@ public final String URI = "https://apisandbox.openbankproject.com/obp/v1.2.1/ban
 	
 	private OpenBankTransactionResponse getOpenBankTransactions() {
 		OpenBankTransactionResponse transactionResponse = restTemplate.getForObject(URI, OpenBankTransactionResponse.class);
+		TransactionMapperHelper.validateOpenBankTransactionResponse(transactionResponse);
 		return transactionResponse;
 	}
 	

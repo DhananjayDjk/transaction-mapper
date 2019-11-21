@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.transaction.mapper.domain.TransactionMapperResult;
 import com.api.transaction.mapper.service.TransactionMapperService;
+import com.api.transaction.mapper.util.TransactionMapperHelper;
 
 @RestController
 @RequestMapping(path = "/transactions")

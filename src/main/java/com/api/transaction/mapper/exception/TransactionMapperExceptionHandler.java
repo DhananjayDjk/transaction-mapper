@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class TransactionMapperExceptionHandler {
 	
-	   @ExceptionHandler(value = RecordNotFoundException.class)
-	   public ResponseEntity<Object> exception(RecordNotFoundException exception) {
-		  System.out.println("Inside exception handler...");
-	      return new ResponseEntity<>("No Transactions Found", HttpStatus.INTERNAL_SERVER_ERROR);
+	   @ExceptionHandler(value = OpenBankTransactionNotFoundException.class)
+	   public ResponseEntity<Object> exception(OpenBankTransactionNotFoundException exception) {
+		  System.out.println("Inside open bank transaction not found exception handler...");
+	      return new ResponseEntity<>("No Transactions Found From Open Bank", HttpStatus.INTERNAL_SERVER_ERROR);
 	   }
 
 }

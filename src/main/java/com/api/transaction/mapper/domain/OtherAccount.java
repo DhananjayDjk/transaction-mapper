@@ -1,7 +1,11 @@
 package com.api.transaction.mapper.domain;
 
-public class OtherAccount {
+import java.io.Serializable;
+
+public class OtherAccount implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	private String number;
 	
 	private Holder holder;

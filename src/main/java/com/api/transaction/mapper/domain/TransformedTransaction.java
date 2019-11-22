@@ -1,7 +1,11 @@
 package com.api.transaction.mapper.domain;
 
-public class TransformedTransaction {
+import java.io.Serializable;
+
+public class TransformedTransaction implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	private String id;
 	
 	private String accountId;

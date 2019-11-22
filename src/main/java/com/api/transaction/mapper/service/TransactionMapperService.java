@@ -46,11 +46,9 @@ public final String URI = "https://apisandbox.openbankproject.com/obp/v1.2.1/ban
 		return transactionResponse;
 	}
 	
-    private String getTransactionAmountByType(OpenBankTransactionResponse openBankTransactionResponse, String transactionType) {
-		
+    private String getTransactionAmountByType(OpenBankTransactionResponse openBankTransactionResponse, String transactionType) {	
 		BigDecimal totalAmount = BigDecimal.ZERO;
-		List<Transaction> transactionList = openBankTransactionResponse.getTransactions();
-	    
+		List<Transaction> transactionList = openBankTransactionResponse.getTransactions();	    
 	    for(Transaction transaction : transactionList) { 	
 	    	if((null == transaction.getDetails()) || (null != transaction.getDetails() && !transactionType.equals(transaction.getDetails().getType()))) {
 	    		continue;
@@ -68,39 +66,13 @@ public final String URI = "https://apisandbox.openbankproject.com/obp/v1.2.1/ban
     private TransactionMapperResult getAllTransactionsByType(OpenBankTransactionResponse openBankTransactionResponse, String transactionType) {
 		TransactionMapperResult transactionResult = new TransactionMapperResult();
 		List<TransformedTransaction> transformedTransactions = new ArrayList<>();
-		List<Transaction> transactionList = openBankTransactionResponse.getTransactions();
-	    
-	    for(Transaction transaction : transactionList) {    	
+		List<Transaction> transactionList = openBankTransactionResponse.getTransactions();	    
+	    for(Transaction transaction : transactionList) {
 	    	if((null == transaction.getDetails()) || (null != transaction.getDetails() && !transactionType.equals(transaction.getDetails().getType()))) {
 	    		continue;
 	    	}
-	    	
-	    	TransformedTransaction  transformedTransaction = new TransformedTransaction();
-	    	transformedTransaction.setId(transaction.getId());
-	    	if(null != transaction.getThis_account()) {
-	    		transformedTransaction.setAccountId(transaction.getThis_account().getId());
-	    	}
-	    	if(null != transaction.getOther_account()) {
-	    		transformedTransaction.setCounterpartyAccount(transaction.getOther_account().getNumber());
-	    		if(null != transaction.getOther_account().getHolder()) {
-	    			transformedTransaction.setCounterpartyName(transaction.getOther_account().getHolder().getName());
-	    		}
-	    		if(null != transaction.getOther_account().getMetadata()) {
-	    			transformedTransaction.setCounterpartyLogoPath(transaction.getOther_account().getMetadata().getImage_URL());
-	    		}
-	    	}
-	    	if(null != transaction.getDetails()) {
-	    		transformedTransaction.setTransactionType(transaction.getDetails().getType());
-	    		transformedTransaction.setDescription(transaction.getDetails().getDescription());
-	    		if(null != transaction.getDetails().getValue()) {
-		    		transformedTransaction.setInstructedCurrency(transaction.getDetails().getValue().getCurrency());
-		    		transformedTransaction.setTransactionCurrency(transaction.getDetails().getValue().getCurrency());
-		    		transformedTransaction.setInstructedAmount(transaction.getDetails().getValue().getAmount());
-		    		transformedTransaction.setTransactionAmount(transaction.getDetails().getValue().getAmount());
-		    	}
-	    	} 	
-	    	transformedTransactions.add(transformedTransaction);
-	    }
+	    	prepareResponse(transformedTransactions, transaction);    	
+	    }   
 	    transactionResult.setTransformedTransactions(transformedTransactions);
 		return transactionResult;
 	}
@@ -108,37 +80,40 @@ public final String URI = "https://apisandbox.openbankproject.com/obp/v1.2.1/ban
     private TransactionMapperResult getAllTransactions(OpenBankTransactionResponse openBankTransactionResponse) {
 		TransactionMapperResult transactionResult = new TransactionMapperResult();
 		List<TransformedTransaction> transformedTransactions = new ArrayList<>();
-		List<Transaction> transactionList = openBankTransactionResponse.getTransactions();
-	    
+		List<Transaction> transactionList = openBankTransactionResponse.getTransactions();    
 	    for(Transaction transaction : transactionList) {
-	    	TransformedTransaction  transformedTransaction = new TransformedTransaction();
-	    	transformedTransaction.setId(transaction.getId());
-	    	if(null != transaction.getThis_account()) {
-	    		transformedTransaction.setAccountId(transaction.getThis_account().getId());
-	    	}
-	    	if(null != transaction.getOther_account()) {
-	    		transformedTransaction.setCounterpartyAccount(transaction.getOther_account().getNumber());
-	    		if(null != transaction.getOther_account().getHolder()) {
-	    			transformedTransaction.setCounterpartyName(transaction.getOther_account().getHolder().getName());
-	    		}
-	    		if(null != transaction.getOther_account().getMetadata()) {
-	    			transformedTransaction.setCounterpartyLogoPath(transaction.getOther_account().getMetadata().getImage_URL());
-	    		}
-	    	}
-	    	if(null != transaction.getDetails()) {
-	    		transformedTransaction.setTransactionType(transaction.getDetails().getType());
-	    		transformedTransaction.setDescription(transaction.getDetails().getDescription());
-	    		if(null != transaction.getDetails().getValue()) {
-		    		transformedTransaction.setInstructedCurrency(transaction.getDetails().getValue().getCurrency());
-		    		transformedTransaction.setTransactionCurrency(transaction.getDetails().getValue().getCurrency());
-		    		transformedTransaction.setInstructedAmount(transaction.getDetails().getValue().getAmount());
-		    		transformedTransaction.setTransactionAmount(transaction.getDetails().getValue().getAmount());
-		    	}
-	    	} 	
-	    	transformedTransactions.add(transformedTransaction);
-	    }
+	    	prepareResponse(transformedTransactions, transaction);
+	    }    
 	    transactionResult.setTransformedTransactions(transformedTransactions);
 		return transactionResult;
+	}
+
+	private void prepareResponse(List<TransformedTransaction> transformedTransactions, Transaction transaction) {
+		TransformedTransaction  transformedTransaction = new TransformedTransaction();
+		transformedTransaction.setId(transaction.getId());
+		if(null != transaction.getThis_account()) {
+			transformedTransaction.setAccountId(transaction.getThis_account().getId());
+		}
+		if(null != transaction.getOther_account()) {
+			transformedTransaction.setCounterpartyAccount(transaction.getOther_account().getNumber());
+			if(null != transaction.getOther_account().getHolder()) {
+				transformedTransaction.setCounterpartyName(transaction.getOther_account().getHolder().getName());
+			}
+			if(null != transaction.getOther_account().getMetadata()) {
+				transformedTransaction.setCounterpartyLogoPath(transaction.getOther_account().getMetadata().getImage_URL());
+			}
+		}
+		if(null != transaction.getDetails()) {
+			transformedTransaction.setTransactionType(transaction.getDetails().getType());
+			transformedTransaction.setDescription(transaction.getDetails().getDescription());
+			if(null != transaction.getDetails().getValue()) {
+				transformedTransaction.setInstructedCurrency(transaction.getDetails().getValue().getCurrency());
+				transformedTransaction.setTransactionCurrency(transaction.getDetails().getValue().getCurrency());
+				transformedTransaction.setInstructedAmount(transaction.getDetails().getValue().getAmount());
+				transformedTransaction.setTransactionAmount(transaction.getDetails().getValue().getAmount());
+			}
+		} 	
+		transformedTransactions.add(transformedTransaction);
 	}
 
 }

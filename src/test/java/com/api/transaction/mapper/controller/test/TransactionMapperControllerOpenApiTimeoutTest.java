@@ -18,15 +18,15 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.api.transaction.mapper.app.TransactionMapperApplication;
 import com.api.transaction.mapper.domain.TransactionMapperResult;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = TransactionMapperApplication.class, webEnvironment=WebEnvironment.RANDOM_PORT)
-public class TransactionMapperControllerNegativeFlowTest {
+@SpringBootTest(classes = TransactionMapperApplication.class, webEnvironment=WebEnvironment.RANDOM_PORT,
+ properties = {"rest.client.timeout=3"})
+public class TransactionMapperControllerOpenApiTimeoutTest {
 	
 	@LocalServerPort
     int randomLocalServerPort;
@@ -52,7 +52,7 @@ public class TransactionMapperControllerNegativeFlowTest {
     {
         CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY, 
-                        new UsernamePasswordCredentials("admin", "wrongadmin"));
+                        new UsernamePasswordCredentials("admin", "admin"));
  
         HttpClient client = HttpClientBuilder
                                 .create()
@@ -61,8 +61,8 @@ public class TransactionMapperControllerNegativeFlowTest {
         return client;
     }
     
-    @Test(expected = HttpClientErrorException.class)
-    public void testUnauthorizedException() throws URISyntaxException
+    @Test(expected = Exception.class)
+    public void testOpenApiServiceTimeout() throws URISyntaxException
     {
     	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transaction-mapper/transactions/alltransactions/";
         URI uri = new URI(baseUrl);

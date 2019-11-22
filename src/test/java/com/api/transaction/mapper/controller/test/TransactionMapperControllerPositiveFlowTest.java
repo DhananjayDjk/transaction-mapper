@@ -9,6 +9,8 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +29,8 @@ import com.api.transaction.mapper.domain.TransactionMapperResult;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TransactionMapperApplication.class, webEnvironment=WebEnvironment.RANDOM_PORT)
 public class TransactionMapperControllerPositiveFlowTest {
+	
+	private static final Logger logger = LogManager.getLogger(TransactionMapperControllerPositiveFlowTest.class);
 	
 	@LocalServerPort
     int randomLocalServerPort;
@@ -69,8 +73,8 @@ public class TransactionMapperControllerPositiveFlowTest {
         ResponseEntity<TransactionMapperResult> result = restTemplate.getForEntity(uri, TransactionMapperResult.class);  
         Assert.assertEquals(200, result.getStatusCodeValue());
         Assert.assertEquals(50, result.getBody().getTransformedTransactions().size());
-        System.out.println("status code..."+result.getStatusCodeValue());
-		System.out.println("transactions list size is..."+result.getBody().getTransformedTransactions().size());
+        logger.info("result status code..."+result.getStatusCodeValue());
+        logger.info("all transactions list size is..."+result.getBody().getTransformedTransactions().size());
     }
     
     @Test
@@ -81,8 +85,8 @@ public class TransactionMapperControllerPositiveFlowTest {
         ResponseEntity<TransactionMapperResult> result = restTemplate.getForEntity(uri, TransactionMapperResult.class);         
         Assert.assertEquals(200, result.getStatusCodeValue());
         Assert.assertEquals(2, result.getBody().getTransformedTransactions().size());
-        System.out.println("status code..."+result.getStatusCodeValue());
-		System.out.println("filtered transactions list size..."+result.getBody().getTransformedTransactions().size());
+        logger.info("result status code..."+result.getStatusCodeValue());
+        logger.info("all transactions list size for transaction type SANDBOX_TAN is..."+result.getBody().getTransformedTransactions().size());
     }
      
     @Test
@@ -93,8 +97,8 @@ public class TransactionMapperControllerPositiveFlowTest {
         ResponseEntity<String> result = restTemplate.getForEntity(uri, String.class);         
         Assert.assertEquals(200, result.getStatusCodeValue());
         Assert.assertEquals("10.00", result.getBody());
-        System.out.println("status code..."+result.getStatusCodeValue());
-		System.out.println("total transaction amount..."+result.getBody());
+        logger.info("result status code..."+result.getStatusCodeValue());
+        logger.info("total transaction amount for transaction type SANDBOX_TAN is..."+result.getBody());
     }
 
 }

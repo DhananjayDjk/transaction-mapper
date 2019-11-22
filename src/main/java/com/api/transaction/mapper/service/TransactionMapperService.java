@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ import com.api.transaction.mapper.domain.TransformedTransaction;
 @Service
 public class TransactionMapperService {
 	
+	private static final Logger logger = LogManager.getLogger(TransactionMapperService.class);
+	
 	@Autowired
 	private Environment env;
 	
@@ -25,24 +29,28 @@ public class TransactionMapperService {
 	RestTemplate restTemplate;
 	
 	public TransactionMapperResult getAllTransactions() {
+		logger.info("Fetching all transactions...");
 		OpenBankTransactionResponse openBankTransactionResponse = getOpenBankTransactions();
 		TransactionMapperResult transactionMapperResult = getAllTransactions(openBankTransactionResponse);
         return transactionMapperResult;
     }
 	
-	public TransactionMapperResult getTransactionsByType(String transactionType) {		
+	public TransactionMapperResult getTransactionsByType(String transactionType) {
+		logger.info("Fetching all transactions for transaction type "+transactionType);
 		OpenBankTransactionResponse openBankTransactionResponse = getOpenBankTransactions();
 		TransactionMapperResult transactionMapperResult = getAllTransactionsByType(openBankTransactionResponse, transactionType);
         return transactionMapperResult;
     }
 	
 	public String getTransactionAmountByType(String transactionType) {
+		logger.info("Fetching total amount for transaction type "+transactionType);
 		OpenBankTransactionResponse openBankTransactionResponse = getOpenBankTransactions();
 		String amount = getTransactionAmountByType(openBankTransactionResponse, transactionType);
         return amount;
     }
 	
 	private OpenBankTransactionResponse getOpenBankTransactions() {
+		logger.info("Calling open bank api service...");
 		OpenBankTransactionResponse transactionResponse = restTemplate.getForObject(env.getProperty("open.bank.api.url"), OpenBankTransactionResponse.class);
 		return transactionResponse;
 	}
@@ -51,6 +59,7 @@ public class TransactionMapperService {
 		BigDecimal totalAmount = BigDecimal.ZERO;
 		List<Transaction> transactionList = openBankTransactionResponse.getTransactions();
 		if (!CollectionUtils.isEmpty(transactionList)) {
+			logger.debug("Open api transaction list size is..."+transactionList.size());
 			for (Transaction transaction : transactionList) {
 				if ((null == transaction.getDetails()) || (null != transaction.getDetails()
 						&& !transactionType.equals(transaction.getDetails().getType()))) {
@@ -64,6 +73,7 @@ public class TransactionMapperService {
 				}
 			}
 		}
+		logger.debug("Total amount is..."+totalAmount.toString());
 		return totalAmount.toString();
 	}
     
@@ -72,6 +82,7 @@ public class TransactionMapperService {
 		List<TransformedTransaction> transformedTransactions = new ArrayList<>();
 		List<Transaction> transactionList = openBankTransactionResponse.getTransactions();
 		if (!CollectionUtils.isEmpty(transactionList)) {
+			logger.debug("Open api transaction list size is..."+transactionList.size());
 			for (Transaction transaction : transactionList) {
 				if ((null == transaction.getDetails()) || (null != transaction.getDetails()
 						&& !transactionType.equals(transaction.getDetails().getType()))) {
@@ -80,6 +91,7 @@ public class TransactionMapperService {
 				prepareResponse(transformedTransactions, transaction);
 			}
 		}
+		logger.debug("transformed transaction list size is..."+transformedTransactions.size());
 	    transactionResult.setTransformedTransactions(transformedTransactions);
 		return transactionResult;
 	}
@@ -89,10 +101,12 @@ public class TransactionMapperService {
 		List<TransformedTransaction> transformedTransactions = new ArrayList<>();
 		List<Transaction> transactionList = openBankTransactionResponse.getTransactions();
 		if (!CollectionUtils.isEmpty(transactionList)) {
+			logger.debug("Open api transaction list size is..."+transactionList.size());
 			for (Transaction transaction : transactionList) {
 				prepareResponse(transformedTransactions, transaction);
 			}
 		}
+		logger.debug("transformed transaction list size is..."+transformedTransactions.size());
 	    transactionResult.setTransformedTransactions(transformedTransactions);
 		return transactionResult;
 	}

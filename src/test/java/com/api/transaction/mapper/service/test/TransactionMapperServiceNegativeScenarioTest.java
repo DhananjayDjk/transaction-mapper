@@ -17,14 +17,13 @@ import org.springframework.web.client.RestTemplate;
 import com.api.transaction.mapper.domain.Details;
 import com.api.transaction.mapper.domain.OpenBankTransactionResponse;
 import com.api.transaction.mapper.domain.Transaction;
-import com.api.transaction.mapper.domain.TransactionMapperResult;
 import com.api.transaction.mapper.domain.Value;
 import com.api.transaction.mapper.service.TransactionMapperService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionMapperServiceNegativeScenarioTest {
 	
-public final String URI = "https://apisandbox.openbankproject.com/obp/v1.2.1/banks/rbs/accounts/savings-kids-john/public/transactions";
+    public final String URI = "https://apisandbox.openbankproject.com/obp/v1.2.1/banks/rbs/accounts/savings-kids-john/public/transactions";
 	
 	@InjectMocks
 	TransactionMapperService transactionMapperService;
@@ -47,16 +46,14 @@ public final String URI = "https://apisandbox.openbankproject.com/obp/v1.2.1/ban
 	public void testNullPointerExceptionForGetTransactionsByType() {
 		Mockito.when(env.getProperty("open.bank.api.url")).thenReturn(URI);
 		Mockito.when(restTemplate.getForObject(URI, OpenBankTransactionResponse.class)).thenReturn(openBankTransactionResponse);	
-		TransactionMapperResult response = transactionMapperService.getTransactionsByType(null);
-		System.out.println("Transaction type list size is..."+response.getTransformedTransactions().size());
+		transactionMapperService.getTransactionsByType(null);
 	}
 	
 	@Test(expected = NullPointerException.class)
 	public void testNullPointerExceptionForGetTransactionAmountByType() {
 		Mockito.when(env.getProperty("open.bank.api.url")).thenReturn(URI);
 		Mockito.when(restTemplate.getForObject(URI, OpenBankTransactionResponse.class)).thenReturn(openBankTransactionResponse);	
-		String response = transactionMapperService.getTransactionAmountByType(null);
-		System.out.println("Transaction amount is..."+response);
+		transactionMapperService.getTransactionAmountByType(null);
 	}
 	
 	private OpenBankTransactionResponse prepareMockOpenApiTransactionResponse() {

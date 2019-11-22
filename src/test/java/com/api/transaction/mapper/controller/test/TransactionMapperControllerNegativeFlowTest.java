@@ -15,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
@@ -66,8 +65,7 @@ public class TransactionMapperControllerNegativeFlowTest {
     {
     	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transaction-mapper/transactions/alltransactions/";
         URI uri = new URI(baseUrl);
-        ResponseEntity<TransactionMapperResult> result = restTemplate.getForEntity(uri, TransactionMapperResult.class);
-        System.out.println("status code..."+result.getStatusCodeValue());
+        restTemplate.getForEntity(uri, TransactionMapperResult.class);
     }
 
 }

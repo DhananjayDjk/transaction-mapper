@@ -65,7 +65,7 @@ public class TransactionMapperControllerNegativeFlowTest {
     @Test(expected = HttpClientErrorException.class)
     public void testUnauthorizedException() throws URISyntaxException
     {
-    	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transactions/alltransactions/";
+    	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transaction-mapper/transactions/alltransactions/";
         URI uri = new URI(baseUrl);
         ResponseEntity<TransactionMapperResult> result = restTemplate.getForEntity(uri, TransactionMapperResult.class);
         System.out.println("status code..."+result.getStatusCodeValue());

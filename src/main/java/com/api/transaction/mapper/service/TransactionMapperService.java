@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,7 +18,8 @@ import com.api.transaction.mapper.util.TransactionMapperHelper;
 @Service
 public class TransactionMapperService {
 	
-public final String URI = "https://apisandbox.openbankproject.com/obp/v1.2.1/banks/rbs/accounts/savings-kids-john/public/transactions";
+	@Autowired
+	private Environment env;
 	
 	@Autowired
 	RestTemplate restTemplate;
@@ -41,7 +43,7 @@ public final String URI = "https://apisandbox.openbankproject.com/obp/v1.2.1/ban
     }
 	
 	private OpenBankTransactionResponse getOpenBankTransactions() {
-		OpenBankTransactionResponse transactionResponse = restTemplate.getForObject(URI, OpenBankTransactionResponse.class);
+		OpenBankTransactionResponse transactionResponse = restTemplate.getForObject(env.getProperty("open.bank.api.url"), OpenBankTransactionResponse.class);
 		TransactionMapperHelper.validateOpenBankTransactionResponse(transactionResponse);
 		return transactionResponse;
 	}

@@ -64,7 +64,7 @@ public class TransactionMapperControllerPositiveFlowTest {
     @Test
     public void testGetAllTransactions() throws URISyntaxException
     {
-    	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transactions/alltransactions/";
+    	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transaction-mapper/transactions/alltransactions/";
         URI uri = new URI(baseUrl);
         ResponseEntity<TransactionMapperResult> result = restTemplate.getForEntity(uri, TransactionMapperResult.class);  
         Assert.assertEquals(200, result.getStatusCodeValue());
@@ -76,7 +76,7 @@ public class TransactionMapperControllerPositiveFlowTest {
     @Test
     public void testGetTransactionsByType() throws URISyntaxException
     {
-    	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transactions/type/SANDBOX_TAN/";
+    	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transaction-mapper/transactions/type/SANDBOX_TAN/";
         URI uri = new URI(baseUrl);
         ResponseEntity<TransactionMapperResult> result = restTemplate.getForEntity(uri, TransactionMapperResult.class);         
         Assert.assertEquals(200, result.getStatusCodeValue());
@@ -88,7 +88,7 @@ public class TransactionMapperControllerPositiveFlowTest {
     @Test
     public void testGetTransactionAmountByType() throws URISyntaxException
     {
-    	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transactions/amount/SANDBOX_TAN/";
+    	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transaction-mapper/transactions/amount/SANDBOX_TAN/";
         URI uri = new URI(baseUrl);
         ResponseEntity<String> result = restTemplate.getForEntity(uri, String.class);         
         Assert.assertEquals(200, result.getStatusCodeValue());

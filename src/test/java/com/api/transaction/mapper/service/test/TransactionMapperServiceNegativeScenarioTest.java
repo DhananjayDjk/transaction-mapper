@@ -3,7 +3,6 @@ package com.api.transaction.mapper.service.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
 
 import com.api.transaction.mapper.domain.OpenBankTransactionResponse;
@@ -31,6 +31,9 @@ public final String URI = "https://apisandbox.openbankproject.com/obp/v1.2.1/ban
 	@Mock
 	RestTemplate restTemplate;
 	
+	@Mock
+	Environment env;
+	
 	OpenBankTransactionResponse openBankTransactionResponse;
 	
 	@Before
@@ -41,6 +44,7 @@ public final String URI = "https://apisandbox.openbankproject.com/obp/v1.2.1/ban
 	
 	@Test(expected = OpenBankTransactionNotFoundException.class)
 	public void testOpenBankTransactionNotFoundExceptionForGetAllTransactions() {
+		Mockito.when(env.getProperty("open.bank.api.url")).thenReturn(URI);
 		Mockito.when(restTemplate.getForObject(URI, OpenBankTransactionResponse.class)).thenReturn(openBankTransactionResponse);	
 		TransactionMapperResult response = transactionMapperService.getAllTransactions();
 		System.out.println("All transactions list size is..."+response.getTransformedTransactions().size());
@@ -48,6 +52,7 @@ public final String URI = "https://apisandbox.openbankproject.com/obp/v1.2.1/ban
 	
 	@Test(expected = OpenBankTransactionNotFoundException.class)
 	public void testOpenBankTransactionNotFoundExceptionForGetTransactionsByType() {
+		Mockito.when(env.getProperty("open.bank.api.url")).thenReturn(URI);
 		Mockito.when(restTemplate.getForObject(URI, OpenBankTransactionResponse.class)).thenReturn(openBankTransactionResponse);	
 		TransactionMapperResult response = transactionMapperService.getTransactionsByType("SANDBOX_TAN");
 		System.out.println("Transaction type list size is..."+response.getTransformedTransactions().size());
@@ -55,6 +60,7 @@ public final String URI = "https://apisandbox.openbankproject.com/obp/v1.2.1/ban
 	
 	@Test(expected = OpenBankTransactionNotFoundException.class)
 	public void testOpenBankTransactionNotFoundExceptionForGetTransactionAmountByType() {
+		Mockito.when(env.getProperty("open.bank.api.url")).thenReturn(URI);
 		Mockito.when(restTemplate.getForObject(URI, OpenBankTransactionResponse.class)).thenReturn(openBankTransactionResponse);	
 		String response = transactionMapperService.getTransactionAmountByType("SANDBOX_TAN");
 		System.out.println("Transaction amount is..."+response);

@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
 
 import com.api.transaction.mapper.domain.Details;
@@ -32,6 +33,9 @@ public class TransactionMapperServicePositiveScenarioTest {
 	@Mock
 	RestTemplate restTemplate;
 	
+	@Mock
+	Environment env;
+	
 	OpenBankTransactionResponse openBankTransactionResponse;
 	
 	@Before
@@ -42,6 +46,7 @@ public class TransactionMapperServicePositiveScenarioTest {
 	
 	@Test
 	public void testGetAllTransactions() {
+		Mockito.when(env.getProperty("open.bank.api.url")).thenReturn(URI);
 		Mockito.when(restTemplate.getForObject(URI, OpenBankTransactionResponse.class)).thenReturn(openBankTransactionResponse);	
 		TransactionMapperResult response = transactionMapperService.getAllTransactions();
 		System.out.println("All transactions list size is..."+response.getTransformedTransactions().size());
@@ -50,6 +55,7 @@ public class TransactionMapperServicePositiveScenarioTest {
 	
 	@Test
 	public void testGetTransactionsByType() {
+		Mockito.when(env.getProperty("open.bank.api.url")).thenReturn(URI);
 		Mockito.when(restTemplate.getForObject(URI, OpenBankTransactionResponse.class)).thenReturn(openBankTransactionResponse);	
 		TransactionMapperResult response = transactionMapperService.getTransactionsByType("SANDBOX_TAN");
 		System.out.println("Transaction type list size is..."+response.getTransformedTransactions().size());
@@ -58,6 +64,7 @@ public class TransactionMapperServicePositiveScenarioTest {
 	
 	@Test
 	public void testGetTransactionAmountByType() {
+		Mockito.when(env.getProperty("open.bank.api.url")).thenReturn(URI);
 		Mockito.when(restTemplate.getForObject(URI, OpenBankTransactionResponse.class)).thenReturn(openBankTransactionResponse);	
 		String response = transactionMapperService.getTransactionAmountByType("SANDBOX_TAN");
 		System.out.println("Transaction amount is..."+response);

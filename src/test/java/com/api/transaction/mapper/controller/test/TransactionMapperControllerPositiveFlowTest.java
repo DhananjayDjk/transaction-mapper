@@ -2,6 +2,7 @@ package com.api.transaction.mapper.controller.test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -25,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.api.transaction.mapper.app.TransactionMapperApplication;
 import com.api.transaction.mapper.domain.TransactionMapperResult;
+import com.api.transaction.mapper.domain.TransformedTransaction;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TransactionMapperApplication.class, webEnvironment=WebEnvironment.RANDOM_PORT)
@@ -78,7 +80,7 @@ public class TransactionMapperControllerPositiveFlowTest {
     }
     
     @Test
-    public void testGetTransactionsByType() throws URISyntaxException
+    public void testGetTransactionsByTypeSandboxTan() throws URISyntaxException
     {
     	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transaction-mapper/transactions/type/SANDBOX_TAN/";
         URI uri = new URI(baseUrl);
@@ -87,10 +89,11 @@ public class TransactionMapperControllerPositiveFlowTest {
         Assert.assertEquals(2, result.getBody().getTransformedTransactions().size());
         logger.info("result status code..."+result.getStatusCodeValue());
         logger.info("all transactions list size for transaction type SANDBOX_TAN is..."+result.getBody().getTransformedTransactions().size());
+        logTransformedTransactionList(result.getBody().getTransformedTransactions());
     }
      
     @Test
-    public void testGetTransactionAmountByType() throws URISyntaxException
+    public void testGetTransactionAmountByTypeSandboxTan() throws URISyntaxException
     {
     	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transaction-mapper/transactions/amount/SANDBOX_TAN/";
         URI uri = new URI(baseUrl);
@@ -99,6 +102,47 @@ public class TransactionMapperControllerPositiveFlowTest {
         Assert.assertEquals("10.00", result.getBody());
         logger.info("result status code..."+result.getStatusCodeValue());
         logger.info("total transaction amount for transaction type SANDBOX_TAN is..."+result.getBody());
+    }
+    
+    @Test
+    public void testGetTransactionsByTypeSandboxPayment() throws URISyntaxException
+    {
+    	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transaction-mapper/transactions/type/sandbox-payment/";
+        URI uri = new URI(baseUrl);
+        ResponseEntity<TransactionMapperResult> result = restTemplate.getForEntity(uri, TransactionMapperResult.class);         
+        Assert.assertEquals(200, result.getStatusCodeValue());
+        Assert.assertEquals(19, result.getBody().getTransformedTransactions().size());
+        logger.info("result status code..."+result.getStatusCodeValue());
+        logger.info("all transactions list size for transaction type SANDBOX_TAN is..."+result.getBody().getTransformedTransactions().size());
+    }
+     
+    @Test
+    public void testGetTransactionAmountByTypeSandboxPayment() throws URISyntaxException
+    {
+    	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transaction-mapper/transactions/amount/sandbox-payment/";
+        URI uri = new URI(baseUrl);
+        ResponseEntity<String> result = restTemplate.getForEntity(uri, String.class);         
+        Assert.assertEquals(200, result.getStatusCodeValue());
+        Assert.assertEquals("73.76", result.getBody());
+        logger.info("result status code..."+result.getStatusCodeValue());
+        logger.info("total transaction amount for transaction type SANDBOX_TAN is..."+result.getBody());
+    }
+    
+    private void logTransformedTransactionList(List<TransformedTransaction> transactionList) {
+    	for(TransformedTransaction transformedTransaction : transactionList) {
+    		logger.debug("id : "+transformedTransaction.getId());
+    		logger.debug("accountId : "+transformedTransaction.getAccountId());
+    		logger.debug("counterpartyAccount : "+transformedTransaction.getCounterpartyAccount());
+    		logger.debug("counterpartyName : "+transformedTransaction.getCounterpartyName());
+    		logger.debug("counterpartyLogoPath : "+transformedTransaction.getCounterpartyLogoPath());
+    		logger.debug("instructedAmount : "+transformedTransaction.getInstructedAmount());
+    		logger.debug("instructedCurrency : "+transformedTransaction.getInstructedCurrency());
+    		logger.debug("transactionAmount : "+transformedTransaction.getTransactionAmount());
+    		logger.debug("transactionCurrency : "+transformedTransaction.getTransactionCurrency());
+    		logger.debug("transactionType : "+transformedTransaction.getTransactionType());
+    		logger.debug("description : "+transformedTransaction.getDescription());
+    	}
+    	
     }
 
 }

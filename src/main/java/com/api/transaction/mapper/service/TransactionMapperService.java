@@ -65,11 +65,9 @@ public class TransactionMapperService {
 						&& !transactionType.equals(transaction.getDetails().getType()))) {
 					continue;
 				}
-				if (null != transaction.getDetails()) {
-					if (null != transaction.getDetails().getValue()) {
-						BigDecimal transactionAmount = new BigDecimal(transaction.getDetails().getValue().getAmount());
-						totalAmount = totalAmount.add(transactionAmount);
-					}
+				if (null != transaction.getDetails() && null != transaction.getDetails().getValue()) {
+					BigDecimal transactionAmount = new BigDecimal(transaction.getDetails().getValue().getAmount());
+					totalAmount = totalAmount.add(transactionAmount);			
 				}
 			}
 		}
@@ -135,7 +133,7 @@ public class TransactionMapperService {
 				transformedTransaction.setInstructedAmount(transaction.getDetails().getValue().getAmount());
 				transformedTransaction.setTransactionAmount(transaction.getDetails().getValue().getAmount());
 			}
-		} 	
+		}
 		transformedTransactions.add(transformedTransaction);
 	}
 

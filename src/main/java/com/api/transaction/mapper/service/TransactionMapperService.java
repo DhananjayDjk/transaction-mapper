@@ -7,13 +7,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
 import com.api.transaction.mapper.domain.OpenBankTransactionResponse;
 import com.api.transaction.mapper.domain.Transaction;
 import com.api.transaction.mapper.domain.TransactionMapperResult;
 import com.api.transaction.mapper.domain.TransformedTransaction;
-import com.api.transaction.mapper.util.TransactionMapperHelper;
 
 @Service
 public class TransactionMapperService {
@@ -44,37 +44,42 @@ public class TransactionMapperService {
 	
 	private OpenBankTransactionResponse getOpenBankTransactions() {
 		OpenBankTransactionResponse transactionResponse = restTemplate.getForObject(env.getProperty("open.bank.api.url"), OpenBankTransactionResponse.class);
-		TransactionMapperHelper.validateOpenBankTransactionResponse(transactionResponse);
 		return transactionResponse;
 	}
 	
     private String getTransactionAmountByType(OpenBankTransactionResponse openBankTransactionResponse, String transactionType) {	
 		BigDecimal totalAmount = BigDecimal.ZERO;
-		List<Transaction> transactionList = openBankTransactionResponse.getTransactions();	    
-	    for(Transaction transaction : transactionList) { 	
-	    	if((null == transaction.getDetails()) || (null != transaction.getDetails() && !transactionType.equals(transaction.getDetails().getType()))) {
-	    		continue;
-	    	}    	    	
-	    	if(null != transaction.getDetails()) {
-	    		if(null != transaction.getDetails().getValue()) {
-		    		BigDecimal transactionAmount = new BigDecimal(transaction.getDetails().getValue().getAmount());
-		    		totalAmount = totalAmount.add(transactionAmount);
-		    	}
-	    	}    	
-	    }    
+		List<Transaction> transactionList = openBankTransactionResponse.getTransactions();
+		if (!CollectionUtils.isEmpty(transactionList)) {
+			for (Transaction transaction : transactionList) {
+				if ((null == transaction.getDetails()) || (null != transaction.getDetails()
+						&& !transactionType.equals(transaction.getDetails().getType()))) {
+					continue;
+				}
+				if (null != transaction.getDetails()) {
+					if (null != transaction.getDetails().getValue()) {
+						BigDecimal transactionAmount = new BigDecimal(transaction.getDetails().getValue().getAmount());
+						totalAmount = totalAmount.add(transactionAmount);
+					}
+				}
+			}
+		}
 		return totalAmount.toString();
 	}
     
     private TransactionMapperResult getAllTransactionsByType(OpenBankTransactionResponse openBankTransactionResponse, String transactionType) {
 		TransactionMapperResult transactionResult = new TransactionMapperResult();
 		List<TransformedTransaction> transformedTransactions = new ArrayList<>();
-		List<Transaction> transactionList = openBankTransactionResponse.getTransactions();	    
-	    for(Transaction transaction : transactionList) {
-	    	if((null == transaction.getDetails()) || (null != transaction.getDetails() && !transactionType.equals(transaction.getDetails().getType()))) {
-	    		continue;
-	    	}
-	    	prepareResponse(transformedTransactions, transaction);    	
-	    }   
+		List<Transaction> transactionList = openBankTransactionResponse.getTransactions();
+		if (!CollectionUtils.isEmpty(transactionList)) {
+			for (Transaction transaction : transactionList) {
+				if ((null == transaction.getDetails()) || (null != transaction.getDetails()
+						&& !transactionType.equals(transaction.getDetails().getType()))) {
+					continue;
+				}
+				prepareResponse(transformedTransactions, transaction);
+			}
+		}
 	    transactionResult.setTransformedTransactions(transformedTransactions);
 		return transactionResult;
 	}
@@ -82,10 +87,12 @@ public class TransactionMapperService {
     private TransactionMapperResult getAllTransactions(OpenBankTransactionResponse openBankTransactionResponse) {
 		TransactionMapperResult transactionResult = new TransactionMapperResult();
 		List<TransformedTransaction> transformedTransactions = new ArrayList<>();
-		List<Transaction> transactionList = openBankTransactionResponse.getTransactions();    
-	    for(Transaction transaction : transactionList) {
-	    	prepareResponse(transformedTransactions, transaction);
-	    }    
+		List<Transaction> transactionList = openBankTransactionResponse.getTransactions();
+		if (!CollectionUtils.isEmpty(transactionList)) {
+			for (Transaction transaction : transactionList) {
+				prepareResponse(transformedTransactions, transaction);
+			}
+		}
 	    transactionResult.setTransformedTransactions(transformedTransactions);
 		return transactionResult;
 	}

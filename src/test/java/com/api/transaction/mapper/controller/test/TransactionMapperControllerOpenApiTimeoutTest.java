@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.api.transaction.mapper.app.TransactionMapperApplication;
@@ -60,10 +61,10 @@ public class TransactionMapperControllerOpenApiTimeoutTest {
         return client;
     }
     
-    @Test(expected = Exception.class)
+    @Test(expected = HttpServerErrorException.class)
     public void testOpenApiServiceTimeout() throws URISyntaxException
     {
-    	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transaction-mapper/transactions/alltransactions/";
+    	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transaction-mapper/transactions/all";
         URI uri = new URI(baseUrl);
         restTemplate.getForEntity(uri, TransactionMapperResult.class);
     }

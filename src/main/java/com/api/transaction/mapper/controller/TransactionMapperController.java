@@ -16,12 +16,12 @@ public class TransactionMapperController {
 	@Autowired
 	TransactionMapperService transactionMapperService;
 
-	@GetMapping(path = "/all", produces = "application/json")
+	@GetMapping(path = "/details", produces = "application/json")
 	public TransactionMapperResult getAllTransactions() {
 		return transactionMapperService.getAllTransactions();
 	}
 
-	@GetMapping(path = "/{transactionType}/all", produces = "application/json")
+	@GetMapping(path = "/{transactionType}/details", produces = "application/json")
 	public TransactionMapperResult getTransactionsByType(@PathVariable String transactionType) {
 		return transactionMapperService.getTransactionsByType(transactionType);
 	}

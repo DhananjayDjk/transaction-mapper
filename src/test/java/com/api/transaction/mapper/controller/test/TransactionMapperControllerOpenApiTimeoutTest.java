@@ -52,7 +52,7 @@ public class TransactionMapperControllerOpenApiTimeoutTest {
 
 	@Test(expected = HttpServerErrorException.class)
 	public void testOpenApiServiceTimeout() throws URISyntaxException {
-		final String baseUrl = "http://localhost:" + randomLocalServerPort + "/transaction-mapper/transactions/all";
+		final String baseUrl = "http://localhost:" + randomLocalServerPort + "/transaction-mapper/transactions/details";
 		URI uri = new URI(baseUrl);
 		restTemplate.getForEntity(uri, TransactionMapperResult.class);
 	}

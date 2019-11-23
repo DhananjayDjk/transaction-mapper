@@ -24,49 +24,37 @@ import com.api.transaction.mapper.app.TransactionMapperApplication;
 import com.api.transaction.mapper.domain.TransactionMapperResult;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = TransactionMapperApplication.class, webEnvironment=WebEnvironment.RANDOM_PORT,
- properties = {"rest.client.timeout=3"})
+@SpringBootTest(classes = TransactionMapperApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT, properties = { "rest.client.timeout=3" })
 public class TransactionMapperControllerOpenApiTimeoutTest {
-	
+
 	@LocalServerPort
-    int randomLocalServerPort;
-	
+	int randomLocalServerPort;
+
 	public RestTemplate restTemplate;
-    
-    @Before
-    public void setUp() 
-    {
-        restTemplate = new RestTemplate(getClientHttpRequestFactory());
-    }
-     
-    private HttpComponentsClientHttpRequestFactory getClientHttpRequestFactory() 
-    {
-        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory
-                          = new HttpComponentsClientHttpRequestFactory();
-         
-        clientHttpRequestFactory.setHttpClient(httpClient());      
-        return clientHttpRequestFactory;
-    }
-    
-    private HttpClient httpClient() 
-    {
-        CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY, 
-                        new UsernamePasswordCredentials("admin", "admin"));
- 
-        HttpClient client = HttpClientBuilder
-                                .create()
-                                .setDefaultCredentialsProvider(credentialsProvider)
-                                .build();
-        return client;
-    }
-    
-    @Test(expected = HttpServerErrorException.class)
-    public void testOpenApiServiceTimeout() throws URISyntaxException
-    {
-    	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transaction-mapper/transactions/all";
-        URI uri = new URI(baseUrl);
-        restTemplate.getForEntity(uri, TransactionMapperResult.class);
-    }
+
+	@Before
+	public void setUp() {
+		restTemplate = new RestTemplate(getClientHttpRequestFactory());
+	}
+
+	private HttpComponentsClientHttpRequestFactory getClientHttpRequestFactory() {
+		HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+		clientHttpRequestFactory.setHttpClient(httpClient());
+		return clientHttpRequestFactory;
+	}
+
+	private HttpClient httpClient() {
+		CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+		credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("admin", "admin"));
+		HttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
+		return client;
+	}
+
+	@Test(expected = HttpServerErrorException.class)
+	public void testOpenApiServiceTimeout() throws URISyntaxException {
+		final String baseUrl = "http://localhost:" + randomLocalServerPort + "/transaction-mapper/transactions/all";
+		URI uri = new URI(baseUrl);
+		restTemplate.getForEntity(uri, TransactionMapperResult.class);
+	}
 
 }

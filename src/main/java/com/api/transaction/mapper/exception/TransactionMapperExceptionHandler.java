@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class TransactionMapperExceptionHandler {
-	
+
 	private static final Logger logger = LogManager.getLogger(TransactionMapperExceptionHandler.class);
-	   
-	   @ExceptionHandler(value = Exception.class)
-	   public ResponseEntity<Object> handleException(Exception exception) {
-		  logger.error("Inside the generic exception handler...");
-	      return new ResponseEntity<>("Exception Occured", HttpStatus.INTERNAL_SERVER_ERROR);
-	   }
+
+	@ExceptionHandler(value = Exception.class)
+	public ResponseEntity<Object> handleException(Exception exception) {
+		logger.error("Inside the generic exception handler...");
+		return new ResponseEntity<>("Exception Occured", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
 }

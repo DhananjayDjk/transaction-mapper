@@ -3,13 +3,13 @@ package com.api.transaction.mapper.domain;
 import java.io.Serializable;
 
 public class Details implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private Value value;
-	
+
 	private String type;
-	
+
 	private String description;
 
 	public String getType() {

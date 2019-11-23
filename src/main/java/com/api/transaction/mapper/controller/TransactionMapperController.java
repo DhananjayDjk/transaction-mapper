@@ -12,22 +12,22 @@ import com.api.transaction.mapper.service.TransactionMapperService;
 @RestController
 @RequestMapping(path = "/transactions")
 public class TransactionMapperController {
-	
+
 	@Autowired
 	TransactionMapperService transactionMapperService;
-	
-	@GetMapping(path="/all", produces = "application/json")
-    public TransactionMapperResult getAllTransactions() {	
+
+	@GetMapping(path = "/all", produces = "application/json")
+	public TransactionMapperResult getAllTransactions() {
 		return transactionMapperService.getAllTransactions();
 	}
-	
-	@GetMapping(path="/{transactionType}/all", produces = "application/json")
-    public TransactionMapperResult getTransactionsByType(@PathVariable String transactionType) {
+
+	@GetMapping(path = "/{transactionType}/all", produces = "application/json")
+	public TransactionMapperResult getTransactionsByType(@PathVariable String transactionType) {
 		return transactionMapperService.getTransactionsByType(transactionType);
 	}
-	
-	@GetMapping(path="/{transactionType}/amount", produces = "application/json")
-    public String getTransactionAmountByType(@PathVariable String transactionType) {
+
+	@GetMapping(path = "/{transactionType}/amount", produces = "application/json")
+	public String getTransactionAmountByType(@PathVariable String transactionType) {
 		return transactionMapperService.getTransactionAmountByType(transactionType);
 	}
 

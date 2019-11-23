@@ -3,15 +3,15 @@ package com.api.transaction.mapper.domain;
 import java.io.Serializable;
 
 public class Transaction implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private String id;
-	
+
 	private ThisAccount this_account;
-	
+
 	private OtherAccount other_account;
-	
+
 	private Details details;
 
 	public String getId() {

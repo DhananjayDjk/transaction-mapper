@@ -9,28 +9,18 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 public class TransactionMapperSecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
 	private Environment env;
-	
-    @Override
-    protected void configure(HttpSecurity http) throws Exception 
-    {
-        http
-         .csrf().disable()
-         .authorizeRequests().anyRequest().authenticated()
-         .and()
-         .httpBasic();
-    }
-  
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) 
-            throws Exception 
-    {
-        auth.inMemoryAuthentication()
-            .withUser(env.getProperty("rest.service.auth.username"))
-            .password("{noop}" + env.getProperty("rest.service.auth.password"))
-            .roles("USER");
-    }
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable().authorizeRequests().anyRequest().authenticated().and().httpBasic();
+	}
+
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.inMemoryAuthentication().withUser(env.getProperty("rest.service.auth.username")).password("{noop}" + env.getProperty("rest.service.auth.password")).roles("USER");
+	}
 
 }

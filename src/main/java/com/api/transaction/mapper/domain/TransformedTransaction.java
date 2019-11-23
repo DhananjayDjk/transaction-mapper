@@ -3,31 +3,31 @@ package com.api.transaction.mapper.domain;
 import java.io.Serializable;
 
 public class TransformedTransaction implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private String id;
-	
+
 	private String accountId;
-	
+
 	private String counterpartyAccount;
-	
-    private String counterpartyName;
-	
+
+	private String counterpartyName;
+
 	private String counterpartyLogoPath;
-	
+
 	private String instructedAmount;
-	
+
 	private String instructedCurrency;
-	
+
 	private String transactionAmount;
-	
+
 	private String transactionCurrency;
-	
+
 	private String transactionType;
-	
+
 	private String description;
-	
+
 	public String getId() {
 		return id;
 	}
@@ -115,7 +115,5 @@ public class TransformedTransaction implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	
 
 }

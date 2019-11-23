@@ -3,13 +3,13 @@ package com.api.transaction.mapper.domain;
 import java.io.Serializable;
 
 public class OtherAccount implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private String number;
-	
+
 	private Holder holder;
-	
+
 	private Metadata metadata;
 
 	public String getNumber() {

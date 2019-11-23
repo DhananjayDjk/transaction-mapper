@@ -40,3 +40,16 @@ Please provide the below credential while consuming the endpoints :-
 username : admin
 password : admin
 
+
+Junit Details
+--------------
+
+This project contains 5 junit test classes. Their names and corresponding usage are as below:-
+
+TransactionMapperServicePositiveScenarioTest  -- To test positive scenarios for the service class.
+TransactionMapperServiceNegativeScenarioTest  -- To test negative scenarios for the service class by passing wrong transaction type input while calling the service.
+TransactionMapperControllerPositiveFlowTest   -- To test end to end positive flow scenarios for the controller class.
+TransactionMapperControllerNegativeFlowTest   -- To test end to end negative flow test for the controller class by passing wrong basic auth credentials while calling the endpoint.
+TransactionMapperControllerOpenApiTimeoutTest -- To test end to end negative flow test for the controller class by reducing the timeout for open api service call.
+
+

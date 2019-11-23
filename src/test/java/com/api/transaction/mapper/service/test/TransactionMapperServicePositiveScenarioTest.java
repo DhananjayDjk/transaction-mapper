@@ -54,11 +54,11 @@ public class TransactionMapperServicePositiveScenarioTest {
 		Mockito.when(restTemplate.getForObject(URI, OpenBankTransactionResponse.class)).thenReturn(openBankTransactionResponse);
 		TransactionMapperResult response = transactionMapperService.getAllTransactions();
 		logger.info("All transactions list size is..." + response.getTransformedTransactions().size());
-		Assert.assertEquals(3, response.getTransformedTransactions().size());
+		Assert.assertEquals(4, response.getTransformedTransactions().size());
 	}
 
 	@Test
-	public void testGetTransactionsByType() {
+	public void testGetTransactionsByTypeSandboxTan() {
 		Mockito.when(env.getProperty("open.bank.api.url")).thenReturn(URI);
 		Mockito.when(restTemplate.getForObject(URI, OpenBankTransactionResponse.class)).thenReturn(openBankTransactionResponse);
 		TransactionMapperResult response = transactionMapperService.getTransactionsByType("SANDBOX_TAN");
@@ -67,12 +67,30 @@ public class TransactionMapperServicePositiveScenarioTest {
 	}
 
 	@Test
-	public void testGetTransactionAmountByType() {
+	public void testGetTransactionAmountByTypeSandboxTan() {
 		Mockito.when(env.getProperty("open.bank.api.url")).thenReturn(URI);
 		Mockito.when(restTemplate.getForObject(URI, OpenBankTransactionResponse.class)).thenReturn(openBankTransactionResponse);
 		String response = transactionMapperService.getTransactionAmountByType("SANDBOX_TAN");
 		logger.info("Total transaction amount for transaction type SANDBOX_TAN is..." + response);
 		Assert.assertEquals("50", response);
+	}
+	
+	@Test
+	public void testGetTransactionsByTypeSandboxNew() {
+		Mockito.when(env.getProperty("open.bank.api.url")).thenReturn(URI);
+		Mockito.when(restTemplate.getForObject(URI, OpenBankTransactionResponse.class)).thenReturn(openBankTransactionResponse);
+		TransactionMapperResult response = transactionMapperService.getTransactionsByType("SANDBOX_NEW");
+		logger.info("All transactions list size for transaction type SANDBOX_NEW is..." + response.getTransformedTransactions().size());
+		Assert.assertEquals(2, response.getTransformedTransactions().size());
+	}
+
+	@Test
+	public void testGetTransactionAmountByTypeSandboxNew() {
+		Mockito.when(env.getProperty("open.bank.api.url")).thenReturn(URI);
+		Mockito.when(restTemplate.getForObject(URI, OpenBankTransactionResponse.class)).thenReturn(openBankTransactionResponse);
+		String response = transactionMapperService.getTransactionAmountByType("SANDBOX_NEW");
+		logger.info("Total transaction amount for transaction type SANDBOX_NEW is..." + response);
+		Assert.assertEquals("110", response);
 	}
 
 	private OpenBankTransactionResponse prepareMockOpenApiTransactionResponse() {
@@ -104,6 +122,15 @@ public class TransactionMapperServicePositiveScenarioTest {
 		details3.setValue(value3);
 		transaction3.setDetails(details3);
 		transactionlist.add(transaction3);
+		
+		Transaction transaction4 = new Transaction();
+		Details details4 = new Details();
+		details4.setType("SANDBOX_NEW");
+		Value value4 = new Value();
+		value4.setAmount("50");
+		details4.setValue(value4);
+		transaction4.setDetails(details4);
+		transactionlist.add(transaction4);
 
 		transactionResponse.setTransactions(transactionlist);
 		return transactionResponse;

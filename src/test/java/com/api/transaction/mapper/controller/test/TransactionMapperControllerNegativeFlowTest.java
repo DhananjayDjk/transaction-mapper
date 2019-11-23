@@ -24,48 +24,37 @@ import com.api.transaction.mapper.app.TransactionMapperApplication;
 import com.api.transaction.mapper.domain.TransactionMapperResult;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = TransactionMapperApplication.class, webEnvironment=WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = TransactionMapperApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 public class TransactionMapperControllerNegativeFlowTest {
-	
+
 	@LocalServerPort
-    int randomLocalServerPort;
-	
+	int randomLocalServerPort;
+
 	public RestTemplate restTemplate;
-    
-    @Before
-    public void setUp() 
-    {
-        restTemplate = new RestTemplate(getClientHttpRequestFactory());
-    }
-     
-    private HttpComponentsClientHttpRequestFactory getClientHttpRequestFactory() 
-    {
-        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory
-                          = new HttpComponentsClientHttpRequestFactory();
-         
-        clientHttpRequestFactory.setHttpClient(httpClient());      
-        return clientHttpRequestFactory;
-    }
-    
-    private HttpClient httpClient() 
-    {
-        CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY, 
-                        new UsernamePasswordCredentials("admin", "wrongadmin"));
- 
-        HttpClient client = HttpClientBuilder
-                                .create()
-                                .setDefaultCredentialsProvider(credentialsProvider)
-                                .build();
-        return client;
-    }
-    
-    @Test(expected = HttpClientErrorException.class)
-    public void testUnauthorizedException() throws URISyntaxException
-    {
-    	final String baseUrl = "http://localhost:"+randomLocalServerPort+"/transaction-mapper/transactions/all";
-        URI uri = new URI(baseUrl);
-        restTemplate.getForEntity(uri, TransactionMapperResult.class);
-    }
+
+	@Before
+	public void setUp() {
+		restTemplate = new RestTemplate(getClientHttpRequestFactory());
+	}
+
+	private HttpComponentsClientHttpRequestFactory getClientHttpRequestFactory() {
+		HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+		clientHttpRequestFactory.setHttpClient(httpClient());
+		return clientHttpRequestFactory;
+	}
+
+	private HttpClient httpClient() {
+		CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+		credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials("admin", "wrongadmin"));
+		HttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
+		return client;
+	}
+
+	@Test(expected = HttpClientErrorException.class)
+	public void testUnauthorizedException() throws URISyntaxException {
+		final String baseUrl = "http://localhost:" + randomLocalServerPort + "/transaction-mapper/transactions/all";
+		URI uri = new URI(baseUrl);
+		restTemplate.getForEntity(uri, TransactionMapperResult.class);
+	}
 
 }
